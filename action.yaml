@@ -1,6 +1,9 @@
 name: Terragrunt-Terraform automation
 description: Action to run in automation Terraform or terragrunt in a pull request
 author: jvo5610
+branding:
+  icon: toggle-right
+  color: blue
 inputs:
   LOG_LEVEL:
     description: Log level
