@@ -1,0 +1,63 @@
+name: Print GitHub Context
+
+inputs:
+  LOG_LEVEL:
+    description: Log level
+    required: false
+    default: ERROR
+  TERRAFORM_VERSION:
+    description: Terraform version
+    required: false
+    default: v1.5.3
+  TERRAGRUNT_VERSION:
+    description: Terragrunt version
+    required: false
+    default: v0.48.6
+  TERRAGRUNT_DEPTH:
+    description: Minimum depth between the childs terragrunt configuration files and the parent
+    required: false
+    default: 0
+  IAC_TOOL:
+    description: IAC tool TERRAGRUNT or TERRAFORM
+    required: true
+  TERRAFORM_MODULES_DIRNAME:
+    description: Terraform modules dirname, to be excluded from paths where automation run
+    required: false
+    default: .modules
+
+runs:
+  using: "composite"
+  steps:
+  
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ${{ github.action_path }}/scripts/requirements.txt
+      shell: bash
+
+    - name: Install Terragrunt
+      uses: autero1/action-terragrunt@v1.3.2
+      with:
+        terragrunt_version: ${{ inputs.TERRAGRUNT_VERSION }}
+
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+        terraform_version: ${{ inputs.TERRAFORM_VERSION }}
+    
+    - name: Run Python script
+      env:
+          TF_CLI_ARGS: -no-color -input=false
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          LOG_LEVEL: ${{ inputs.LOG_LEVEL }}
+          TERRAGRUNT_DEPTH: ${{ inputs.TERRAGRUNT_DEPTH }}
+          IAC_TOOL: ${{ inputs.IAC_TOOL }}
+          TERRAFORM_MODULES_DIRNAME: ${{ inputs.TERRAFORM_MODULES_DIRNAME }}
+      run: python3 ${{ github.action_path }}/scripts/main.py
+      shell: bash
