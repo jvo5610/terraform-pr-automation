@@ -1,5 +1,6 @@
 name: Terragrunt-Terraform automation
-description: This is a github action created to run in automation Terraform or terragrunt in a pull request, you could then triggers plans by changes in terragrunt .tf or terragrunt.hcl files
+description: Action to run in automation Terraform or terragrunt in a pull request
+author: jvo5610
 inputs:
   LOG_LEVEL:
     description: Log level
