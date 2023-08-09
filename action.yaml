@@ -1,4 +1,4 @@
-name: Terragrunt-Terraform automation
+name: terraform-pr-automation
 description: Action to run in automation Terraform or terragrunt in a pull request
 author: jvo5610
 branding:
