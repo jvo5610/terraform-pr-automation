@@ -1,5 +1,5 @@
-name: Print GitHub Context
-
+name: Terragrunt-Terraform automation
+description: This is a github action created to run in automation Terraform or terragrunt in a pull request, you could then triggers plans by changes in terragrunt .tf or terragrunt.hcl files
 inputs:
   LOG_LEVEL:
     description: Log level
