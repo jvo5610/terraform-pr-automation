@@ -45,6 +45,9 @@ def case_pull_request():
     for path in filtered_paths:
         # Specify the working directory
         working_directory = GITHUB_WORKSPACE+"/"+path
+        # Check if path exists or was deleted
+        if not os.path.exists(working_directory):
+            continue
 
         if IAC_TOOL == "TERRAFORM":
              # Run init
