@@ -24,10 +24,12 @@ inputs:
   IAC_TOOL:
     description: IAC tool TERRAGRUNT or TERRAFORM
     required: true
-  TERRAFORM_MODULES_DIRNAME:
-    description: Terraform modules dirname, to be excluded from paths where automation run
+  EXCLUDED_DIRNAMES:
+    description: Dirnames to be excluded from paths where automation run
     required: false
-    default: .modules
+    default:
+      - .modules
+      - .github
 
 runs:
   using: "composite"
@@ -62,6 +64,6 @@ runs:
           LOG_LEVEL: ${{ inputs.LOG_LEVEL }}
           TERRAGRUNT_DEPTH: ${{ inputs.TERRAGRUNT_DEPTH }}
           IAC_TOOL: ${{ inputs.IAC_TOOL }}
-          TERRAFORM_MODULES_DIRNAME: ${{ inputs.TERRAFORM_MODULES_DIRNAME }}
+          EXCLUDED_DIRNAMES: ${{ inputs.EXCLUDED_DIRNAMES }}
       run: python3 ${{ github.action_path }}/scripts/main.py
       shell: bash
