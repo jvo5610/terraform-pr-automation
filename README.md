@@ -12,7 +12,7 @@ This is a github action created to run in automation Terraform or terragrunt in 
 | TERRAGRUNT_VERSION | Terragrunt version | v0.48.6 | False |
 | TERRAGRUNT_DEPTH | Depth of the parent terragrunt.hcl file. E.g: aws/{path of terragrunt parent file} = 1 | 0 | False |
 | IAC_TOOL | IAC Tool to be used TERRAGRUNT or TERRAFORM | TERRAGRUNT | True |
-| TERRAFORM_MODULES_DIRNAME | Directory names to be skipped to run terraform because they are modules | .modules | False |
+| EXCLUDED_DIRNAMES | Directory names to be skipped to run terraform or terragrunt | [".github", ".modules"] | False |
 
 ## Terraform usage example
 
@@ -56,6 +56,7 @@ jobs:
       with:
         LOG_LEVEL: DEBUG
         IAC_TOOL: TERRAFORM
+        EXCLUDED_DIRNAMES: '[".github", ".modules"]'
 ```
 
 ## Terragrunt usage example
@@ -100,6 +101,7 @@ jobs:
       with:
         LOG_LEVEL: DEBUG
         IAC_TOOL: TERRAGRUNT
+        EXCLUDED_DIRNAMES: '[".github", ".modules"]'
 ```
 
 ## PR Usage 
