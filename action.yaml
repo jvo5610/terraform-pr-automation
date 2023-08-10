@@ -27,7 +27,7 @@ inputs:
   EXCLUDED_DIRNAMES:
     description: Dirnames to be excluded from paths where automation run
     required: false
-    default: '[".github", ".modules"]'
+    default: [".github", ".modules"]
 
 runs:
   using: "composite"
