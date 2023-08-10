@@ -47,7 +47,7 @@ def case_pull_request():
         working_directory = GITHUB_WORKSPACE+"/"+path
         # Check if path exists or was deleted
         if not os.path.exists(working_directory):
-            logger.warning(f"Path {path} was deleted so will be skipped!")
+            logger.warning(f"Path <{path}> was deleted so will be skipped!")
             continue
 
         if IAC_TOOL == "TERRAFORM":
