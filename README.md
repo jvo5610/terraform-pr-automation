@@ -18,7 +18,7 @@ This is a github action created to run in automation Terraform or terragrunt in 
 
 ---
 
-```bash
+```yaml
 name: Terraform automation
 on:
   pull_request:
@@ -62,7 +62,7 @@ jobs:
 
 ---
 
-```bash
+```yaml
 name: Terragrunt automation
 on:
   pull_request:
