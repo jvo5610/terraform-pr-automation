@@ -26,6 +26,7 @@ jobs:
           done
           sleep 4
           echo "ping success"
+        continue-on-error: true
 
       - name: check zerotier connection - retry
         if: ${{ failure() }}
@@ -40,11 +41,9 @@ jobs:
           echo "ping success"
 
       - uses: actions/checkout@v2
-        if: always()
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - uses: sonarsource/sonarqube-scan-action@master
-        if: always()
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
