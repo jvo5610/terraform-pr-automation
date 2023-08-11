@@ -27,9 +27,11 @@ jobs:
           sleep 4
           echo "ping success"
         continue-on-error: true
+        env:
+          RETRY_PING: ${{ failure() }}
 
       - name: check zerotier connection - retry
-        if: ${{ failure() }}
+        if: ${{ env.RETRY_PING }}
         shell: bash
         run: |
           count=5
