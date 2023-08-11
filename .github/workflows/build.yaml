@@ -24,14 +24,10 @@ jobs:
             sleep 1 ;
             let count=count-1
           done
-          sleep 4
           echo "ping success"
         continue-on-error: true
-        env:
-          RETRY_PING: ${{ failure() }}
 
       - name: check zerotier connection - retry
-        if: ${{ env.RETRY_PING }}
         shell: bash
         run: |
           count=5
