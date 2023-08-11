@@ -18,12 +18,13 @@ jobs:
       - name: ping host
         shell: bash
         run: |
-          count=60
+          count=30
           while ! ping -c 1 ${{ secrets.ZEROTIER_HOST_IP }} ; do
             echo "waiting..." ;
             sleep 1 ;
             let count=count-1
           done
+          sleep 4
           echo "ping success"
 
       - uses: actions/checkout@v2

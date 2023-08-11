@@ -32,13 +32,12 @@ def case_pull_request():
     if len(filtered_paths) < 1:
         comment_pr_message(logger, pr, f"No files changed accomplish Terragrunt path depth defined in action [depth={TERRAGRUNT_DEPTH}]")
 
-    # Command to execute
-    command = []
-    if IAC_TOOL == "TERRAFORM":
-        command.extend(["terraform","plan"])
-        command_init=["terraform", "init"]
-    if IAC_TOOL == "TERRAGRUNT":
-        command.extend(["terragrunt","run-all", "plan"])
+    # Set commands to execute
+    command = {
+        "TERRAGRUNT" = ["terragrunt","run-all", "plan"],
+        "TERRAFORM" = ["terraform","plan"]
+    }
+    command_init=["terraform", "init"]
 
     executions_results=[]
 
@@ -63,15 +62,15 @@ def case_pull_request():
                 continue
 
         # Run commands
-        command_result = run_commands(logger, command, working_directory)
+        command_result = run_commands(logger, command[IAC_TOOL], working_directory)
         if command_result["success"]:
             # Print the command output
             logger.debug("Command output: "+command_result["output"])
-            comment_pr(logger, pr, command_result["output"], " ".join(command),path)
+            comment_pr(logger, pr, command_result["output"], " ".join(command[IAC_TOOL]),path)
         else:
             # Print error message and exit with non-zero status code
             logger.error("Command error: "+command_result["output"])
-            comment_pr(logger, pr, command_result["output"], " ".join(command),path)
+            comment_pr(logger, pr, command_result["output"], " ".join(command[IAC_TOOL]),path)
 
         executions_results.append(command_result["success"])
 
