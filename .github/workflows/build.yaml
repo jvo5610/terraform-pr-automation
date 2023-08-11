@@ -18,7 +18,7 @@ jobs:
       - name: ping host
         shell: bash
         run: |
-          count=5
+          count=15
           while ! ping -c 1 ${{ secrets.ZEROTIER_HOST_IP }} ; do
             echo "waiting..." ;
             sleep 1 ;
