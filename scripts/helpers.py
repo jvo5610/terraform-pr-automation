@@ -56,7 +56,9 @@ def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames
                         if not contains_filtered_dirnames(file, excluded_dirnames):
                             filtered_list.append(clean_path)
             return filtered_list
-        except:
+            
+        except Exception as e:
+            logger.error(f"Error: {str(e)}")
             logger.error("No files accomplish path depth")
             logger.error("List: %s", ', '.join(files_list))
             return []
