@@ -47,7 +47,7 @@ def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames
     if iac_tool == "TERRAGRUNT":
         return filter_terragrunt(logger, files_list, depth, excluded_dirnames)
     elif iac_tool == "TERRAFORM":
-        return filter_terraform(logger, files_list, excluded_dirnames)
+        return filter_terraform(files_list, excluded_dirnames)
 
 def filter_terragrunt(logger, files_list, depth, excluded_dirnames):
     try:
@@ -66,7 +66,7 @@ def filter_terragrunt(logger, files_list, depth, excluded_dirnames):
         logger.error("List: %s", ', '.join(files_list))
         return []
 
-def filter_terraform(logger, files_list, excluded_dirnames):
+def filter_terraform(files_list, excluded_dirnames):
     filtered_list = []
     for file in files_list:
         subdirs = file.split('/')
