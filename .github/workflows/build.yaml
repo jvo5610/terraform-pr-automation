@@ -15,16 +15,28 @@ jobs:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
-      - name: ping host
+      - name: check zerotier connection
         shell: bash
         run: |
-          count=30
+          count=5
           while ! ping -c 1 ${{ secrets.ZEROTIER_HOST_IP }} ; do
             echo "waiting..." ;
             sleep 1 ;
             let count=count-1
           done
           sleep 4
+          echo "ping success"
+
+      - name: check zerotier connection - retry
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          count=5
+          while ! ping -c 1 ${{ secrets.ZEROTIER_HOST_IP }} ; do
+            echo "waiting..." ;
+            sleep 1 ;
+            let count=count-1
+          done
           echo "ping success"
 
       - uses: actions/checkout@v2
