@@ -1,5 +1,11 @@
 import subprocess
 
+def contains_filtered_dirnames(string, substrings):
+    for substring in substrings:
+        if substring in string:
+            return True
+    return False
+
 def extract_path_from_command(logger, command, iac_tool):
     # Split the command into separate words
     words = command.split()
@@ -37,7 +43,7 @@ def format_command(command, iac_tool):
 
     return words
 
-def filter_files_by_depth(logger, files_list, depth, iac_tool, terraform_modules_dirname):
+def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames):
     filtered_list = []
 
     if iac_tool=="TERRAGRUNT":
@@ -47,7 +53,8 @@ def filter_files_by_depth(logger, files_list, depth, iac_tool, terraform_modules
                     subdirs = file.split('/')
                     if "terragrunt.hcl" not in subdirs[depth]:
                         clean_path = '/'.join(subdirs[:-1])
-                        filtered_list.append(clean_path)
+                        if not contains_filtered_dirnames(file, excluded_dirnames):
+                            filtered_list.append(clean_path)
             return filtered_list
         except:
             logger.error("No files accomplish path depth")
@@ -59,7 +66,7 @@ def filter_files_by_depth(logger, files_list, depth, iac_tool, terraform_modules
             for file in files_list:
                 subdirs = file.split('/')
                 clean_path = '/'.join(subdirs[:-1])
-                if terraform_modules_dirname not in file:
+                if not contains_filtered_dirnames(file, excluded_dirnames):
                     filtered_list.append(clean_path)
             unique_list = list(set(filtered_list))
             return unique_list

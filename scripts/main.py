@@ -10,7 +10,7 @@ GITHUB_TOKEN=GITHUB_CONTEXT.get("token")
 GITHUB_WORKSPACE=os.environ.get("GITHUB_WORKSPACE")
 TERRAGRUNT_DEPTH=int(os.environ.get("TERRAGRUNT_DEPTH"))
 IAC_TOOL=os.environ.get("IAC_TOOL").upper()
-TERRAFORM_MODULES_DIRNAME=os.environ.get("TERRAFORM_MODULES_DIRNAME")
+EXCLUDED_DIRNAMES=json.loads(os.environ.get("EXCLUDED_DIRNAMES"))
 
 logger = configure_logging()
 github = configure_github_api(GITHUB_TOKEN)
@@ -26,7 +26,7 @@ def case_pull_request():
     changed_files = [file.filename for file in pr.get_files()]
     logger.debug("Changed files: %s", ', '.join(changed_files))
 
-    filtered_paths = filter_files_by_depth(logger, changed_files, TERRAGRUNT_DEPTH, IAC_TOOL, TERRAFORM_MODULES_DIRNAME)
+    filtered_paths = filter_files_by_depth(logger, changed_files, TERRAGRUNT_DEPTH, IAC_TOOL, EXCLUDED_DIRNAMES)
     logger.debug("Filtered paths: %s", ', '.join(filtered_paths))
 
     if len(filtered_paths) < 1:
@@ -45,6 +45,10 @@ def case_pull_request():
     for path in filtered_paths:
         # Specify the working directory
         working_directory = GITHUB_WORKSPACE+"/"+path
+        # Check if path exists or was deleted
+        if not os.path.exists(working_directory):
+            logger.warning(f"Path <{path}> was deleted so will be skipped!")
+            continue
 
         if IAC_TOOL == "TERRAFORM":
              # Run init
