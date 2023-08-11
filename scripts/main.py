@@ -52,7 +52,7 @@ def case_pull_request():
 
         if IAC_TOOL == "TERRAFORM":
              # Run init
-            init_result = run_commands(logger, command_init, working_directory, IAC_TOOL)
+            init_result = run_commands(logger, command_init, working_directory)
             if init_result["success"]:
                 # Print the command output
                 logger.debug("Init output: "+init_result["output"])
@@ -63,7 +63,7 @@ def case_pull_request():
                 continue
 
         # Run commands
-        command_result = run_commands(logger, command, working_directory, IAC_TOOL)
+        command_result = run_commands(logger, command, working_directory)
         if command_result["success"]:
             # Print the command output
             logger.debug("Command output: "+command_result["output"])
@@ -97,13 +97,13 @@ def case_issue_comment():
     # Command to execute
     command = format_command(comment_metadata.get("body"), IAC_TOOL)
     # Specify the working directory
-    relative_path=extract_path_from_command(logger, comment_metadata.get("body"), IAC_TOOL)
+    relative_path=extract_path_from_command(logger, comment_metadata.get("body"))
     working_directory = GITHUB_WORKSPACE+"/"+relative_path
 
     # Run init if terraform
     if IAC_TOOL == "TERRAFORM":
         command_init=["terraform", "init"]
-        init_result = run_commands(logger, command_init, working_directory, IAC_TOOL)
+        init_result = run_commands(logger, command_init, working_directory)
         if init_result["success"]:
             # Print the command output
             logger.debug("Init output: "+init_result["output"])
@@ -114,7 +114,7 @@ def case_issue_comment():
             exit(1)
 
     # Run commands
-    command_result = run_commands(logger, command, working_directory, IAC_TOOL)
+    command_result = run_commands(logger, command, working_directory)
     if command_result["success"]:
         # Print the command output
         logger.debug("Command output: "+command_result["output"])

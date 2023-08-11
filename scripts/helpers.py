@@ -6,7 +6,7 @@ def contains_filtered_dirnames(string, substrings):
             return True
     return False
 
-def extract_path_from_command(logger, command, iac_tool):
+def extract_path_from_command(logger, command):
     # Split the command into separate words
     words = command.split()
 
@@ -56,7 +56,7 @@ def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames
                         if not contains_filtered_dirnames(file, excluded_dirnames):
                             filtered_list.append(clean_path)
             return filtered_list
-            
+
         except Exception as e:
             logger.error(f"Error: {str(e)}")
             logger.error("No files accomplish path depth")
@@ -75,7 +75,7 @@ def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames
         else:
             return filtered_list
 
-def run_commands(logger, command, working_directory, iac_tool):
+def run_commands(logger, command, working_directory):
     
     logger.debug("COMMAND: ")
     logger.debug(command)
