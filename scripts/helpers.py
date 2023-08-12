@@ -126,6 +126,3 @@ def comment_pr_message(logger, pull_request, body):
     except Exception as e:
         logger.error(f"Error: {str(e)}")
         exit(1)
-
-    
-###  Results for  ${dir} \n\n <details><summary>Show output</summary> \n\n` + formatOutput(cmdOutput);

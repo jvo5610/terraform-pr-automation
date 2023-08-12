@@ -139,3 +139,4 @@ try:
 except Exception as e:
     logger.error(f"Error: {str(e)}")
     exit(1)
+
