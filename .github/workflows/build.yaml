@@ -4,7 +4,7 @@ on:
   push:
 
 env:
-  TEST_GITHUB_TOKEN: ${{ secrets.MOCK_GITHUB_TOKEN }}
+  MOCK_GITHUB_TOKEN: ${{ secrets.MOCK_GITHUB_TOKEN }}
 
 jobs:
   build:
