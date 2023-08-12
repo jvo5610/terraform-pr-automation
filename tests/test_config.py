@@ -13,7 +13,7 @@ class TestConfig(unittest.TestCase):
 
     def test_configure_github_api(self):
         # Set up mocks
-        github_token = os.environ.get("TEST_GITHUB_TOKEN")
+        github_token = os.environ.get("MOCK_GITHUB_TOKEN")
 
         # Call the function
         result = config.configure_github_api(github_token)
