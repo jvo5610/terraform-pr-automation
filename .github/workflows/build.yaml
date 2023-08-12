@@ -58,7 +58,7 @@ jobs:
 
       - name: fix code coverage paths
         run: |
-          sed -i 's/\/home\/runner\/work\/${{ env.GITHUB_REPOSITORY }}\/${{ env.GITHUB_REPOSITORY }}\//\/github\/workspace\//g' coverage.xml
+          sed -i "s/\/home\/runner\/work\/${{ github.repository }}\/${{ github.repository }}\//\/github\/workspace\//g" coverage.xml
 
       - uses: sonarsource/sonarqube-scan-action@master
         env:
