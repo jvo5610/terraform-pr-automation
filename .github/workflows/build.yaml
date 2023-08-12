@@ -3,6 +3,9 @@ name: Build
 on:
   push:
 
+env:
+  TEST_GITHUB_TOKEN: ${{ secrets.MOCK_GITHUB_TOKEN }}
+
 jobs:
   build:
     name: Build
@@ -55,7 +58,7 @@ jobs:
 
       - name: Run tests and generate coverage
         run: pytest --cov=scripts tests/
-        
+
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
