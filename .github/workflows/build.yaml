@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches:
-      - main
 
+env:
+  MOCK_GITHUB_TOKEN: ${{ secrets.MOCK_GITHUB_TOKEN }}
 
 jobs:
   build:
@@ -18,7 +18,19 @@ jobs:
           network_id: ${{ secrets.ZEROTIER_NETWORK_ID }}
           auth_token: ${{ secrets.ZEROTIER_CENTRAL_TOKEN }}
 
-      - name: ping host
+      - name: check zerotier connection
+        shell: bash
+        run: |
+          count=10
+          while ! ping -c 1 ${{ secrets.ZEROTIER_HOST_IP }} ; do
+            echo "waiting..." ;
+            sleep 1 ;
+            let count=count-1
+          done
+          echo "ping success"
+        continue-on-error: true
+
+      - name: check zerotier connection - retry
         shell: bash
         run: |
           count=5
@@ -31,7 +43,22 @@ jobs:
 
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests and generate coverage
+        run: pytest --cov=scripts tests/
+
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

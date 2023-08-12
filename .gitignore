@@ -1,0 +1,49 @@
+# Compiled Python files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+
+# Compiled C extensions
+*.so
+
+# Coverage
+.coverage
+htmlcov/
+
+# Pytest cache
+.cache/
+
+# Logs
+*.log
+
+# Editor/IDE specific files
+.idea/
+.vscode/
+
+# Environment variables
+.env
+*.env
+
+# Dependency-related files
+*.egg-info/
+*.egg
+dist/
+build/
+*.egg-info
+
+# Compiled files
+*.pyc
+*.pyo
+
+# Jupyter Notebook checkpoint files
+.ipynb_checkpoints/
+
+# System-specific files
+.DS_Store
+Thumbs.db
+
+**/coverage.xml
+**/.pytest_cache

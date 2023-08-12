@@ -1,12 +1,12 @@
 import subprocess
 
-def contains_filtered_dirnames(string, substrings):
-    for substring in substrings:
-        if substring in string:
+def contains_filtered_dirnames(filename, excluded_dirnames):
+    for dirname in excluded_dirnames:
+        if dirname in filename:
             return True
     return False
 
-def extract_path_from_command(logger, command, iac_tool):
+def extract_path_from_command(logger, command):
     # Split the command into separate words
     words = command.split()
 
@@ -44,36 +44,39 @@ def format_command(command, iac_tool):
     return words
 
 def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames):
-    filtered_list = []
+    if iac_tool == "TERRAGRUNT":
+        return filter_terragrunt(logger, files_list, depth, excluded_dirnames)
+    elif iac_tool == "TERRAFORM":
+        return filter_terraform(files_list, excluded_dirnames)
 
-    if iac_tool=="TERRAGRUNT":
-        try:
-            for file in files_list:
-                if "terragrunt.hcl" in file:
-                    subdirs = file.split('/')
-                    if "terragrunt.hcl" not in subdirs[depth]:
-                        clean_path = '/'.join(subdirs[:-1])
-                        if not contains_filtered_dirnames(file, excluded_dirnames):
-                            filtered_list.append(clean_path)
-            return filtered_list
-        except:
-            logger.error("No files accomplish path depth")
-            logger.error("List: %s", ', '.join(files_list))
-            return []
-
-    if iac_tool=="TERRAFORM":
-        if len(files_list) > 0:
-            for file in files_list:
+def filter_terragrunt(logger, files_list, depth, excluded_dirnames):
+    try:
+        filtered_list = []
+        for file in files_list:
+            if "terragrunt.hcl" in file:
                 subdirs = file.split('/')
-                clean_path = '/'.join(subdirs[:-1])
-                if not contains_filtered_dirnames(file, excluded_dirnames):
-                    filtered_list.append(clean_path)
-            unique_list = list(set(filtered_list))
-            return unique_list
-        else:
-            return filtered_list
+                if "terragrunt.hcl" not in subdirs[depth]:
+                    clean_path = '/'.join(subdirs[:-1])
+                    if not contains_filtered_dirnames(file, excluded_dirnames):
+                        filtered_list.append(clean_path)
+        return filtered_list
+    except Exception as e:
+        logger.error(f"Error: {str(e)}")
+        logger.error("No files accomplish path depth")
+        logger.error("List: %s", ', '.join(files_list))
+        return []
 
-def run_commands(logger, command, working_directory, iac_tool):
+def filter_terraform(files_list, excluded_dirnames):
+    filtered_list = []
+    for file in files_list:
+        subdirs = file.split('/')
+        clean_path = '/'.join(subdirs[:-1])
+        if not contains_filtered_dirnames(file, excluded_dirnames):
+            filtered_list.append(clean_path)
+    unique_list = list(set(filtered_list))
+    return unique_list
+
+def run_commands(logger, command, working_directory):
     
     logger.debug("COMMAND: ")
     logger.debug(command)
@@ -123,6 +126,3 @@ def comment_pr_message(logger, pull_request, body):
     except Exception as e:
         logger.error(f"Error: {str(e)}")
         exit(1)
-
-    
-###  Results for  ${dir} \n\n <details><summary>Show output</summary> \n\n` + formatOutput(cmdOutput);
