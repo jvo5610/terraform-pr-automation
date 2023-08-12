@@ -1,4 +1,3 @@
 PyGithub
 pytest-cov
 pytest
-sonar-scanner
