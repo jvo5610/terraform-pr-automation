@@ -34,5 +34,3 @@ def test_format_command_with_terragrunt():
     iac_tool = "TERRAGRUNT"
     result = helpers.format_command(command, iac_tool)
     assert "--terragrunt-non-interactive" in result
-
-# Similarly, you can add more tests for the remaining functions
