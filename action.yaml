@@ -71,5 +71,7 @@ runs:
           TERRAGRUNT_DEPTH: ${{ inputs.TERRAGRUNT_DEPTH }}
           IAC_TOOL: ${{ inputs.IAC_TOOL }}
           EXCLUDED_DIRNAMES: ${{ inputs.EXCLUDED_DIRNAMES }}
+          REVIEW_REQUIRED: ${{ inputs.REVIEW_REQUIRED }}
+          REVIEW_PATHS: ${{ inputs.REVIEW_PATHS }}
       run: python3 ${{ github.action_path }}/scripts/main.py
       shell: bash
