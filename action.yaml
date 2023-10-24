@@ -31,7 +31,7 @@ inputs:
   REVIEW_REQUIRED:
     description: Review is required to run apply command
     required: false
-    default: true
+    default: false
   REVIEW_PATHS:
     description: Paths that need review to apply
     required: false
