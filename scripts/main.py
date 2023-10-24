@@ -96,7 +96,7 @@ def case_issue_comment():
     try:
         command = format_command(comment_metadata.get("body"), IAC_TOOL)
     except Exception as e:
-        comment_pr_message(logger, pr, "Error running action: str(e)")
+        comment_pr_message(logger, pr, f"Error running action: {str(e)}")
         exit(1)
 
     # Specify the working directory
