@@ -40,6 +40,8 @@ def format_command(logger, command, iac_tool, is_reviewed, review_required, revi
     paths_need_review = set1.intersection(set3)
     command_intersections = set1.intersection(set2)
 
+    logger.debug(f"words set: {set1}")
+    logger.debug(f"paths that need review set : {set3}")
     logger.debug(f"Path that need review: {review_paths}")
     logger.debug(f"Path intersections: {paths_need_review}")
     logger.debug(f"Review required: {review_required}")
