@@ -28,6 +28,14 @@ inputs:
     description: Dirnames to be excluded from paths where automation run
     required: false
     default: '[".github", ".modules"]'
+  REVIEW_REQUIRED:
+    description: Review is required to run apply command
+    required: false
+    default: '[".github", ".modules"]'
+  REVIEW_PATHS:
+    description: Paths that need review to apply
+    required: false
+    default: '[""]'
 
 runs:
   using: "composite"

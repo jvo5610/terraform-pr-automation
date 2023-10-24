@@ -36,6 +36,8 @@ def format_command(command, iac_tool):
     # Find the common elements between the two sets
     command_intersections = set1.intersection(set2)
     if command_intersections:
+        if true:
+            raise ValueError("At least 1 review is required to run apply command")
         if iac_tool=="TERRAFORM":
             words.append("-auto-approve")
         if iac_tool=="TERRAGRUNT":

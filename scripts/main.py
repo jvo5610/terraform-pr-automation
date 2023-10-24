@@ -1,7 +1,7 @@
 import os
 import json
 from config import configure_logging, configure_github_api
-from helpers import extract_path_from_command, format_command, filter_files_by_depth, run_commands, comment_pr, comment_pr_message
+from helpers import extract_path_from_command, format_command, filter_files_by_depth, run_commands, comment_pr, comment_pr_message, return_error
 
 GITHUB_CONTEXT=json.loads(os.environ.get("GITHUB_CONTEXT"))
 EVENT_TYPE=GITHUB_CONTEXT.get("event_name")
@@ -93,8 +93,12 @@ def case_issue_comment():
     logger.debug("COMMENT_BODY="+comment_metadata.get("body"))
     logger.debug("WORKSPACE="+GITHUB_WORKSPACE)
 
-    # Command to execute
-    command = format_command(comment_metadata.get("body"), IAC_TOOL)
+    try:
+        command = format_command(comment_metadata.get("body"), IAC_TOOL)
+    except Exception as e:
+        comment_pr_message(logger, pr, str(e))
+        exit(1)
+
     # Specify the working directory
     relative_path=extract_path_from_command(logger, comment_metadata.get("body"))
     working_directory = GITHUB_WORKSPACE+"/"+relative_path
