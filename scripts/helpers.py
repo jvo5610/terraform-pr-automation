@@ -40,6 +40,9 @@ def format_command(command, iac_tool, is_reviewed, review_required, review_paths
     paths_need_review = set1.intersection(set3)
     command_intersections = set1.intersection(set2)
 
+    print(f"path_intersection: {paths_need_review}")
+    print(f"review_required: {review_required}")
+
     if command_intersections:
         if not is_reviewed and paths_need_review and review_required:
             raise ValueError("At least 1 review is required to run apply command")
