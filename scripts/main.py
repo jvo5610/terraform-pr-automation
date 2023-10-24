@@ -96,8 +96,6 @@ def case_issue_comment():
             is_reviewed = True
             break
 
-    print(f"is reviewed: {is_reviewed}")
-
     comment = pr.get_issue_comment(comment_metadata.get("id"))
     comment.create_reaction("rocket")
     
