@@ -1,7 +1,7 @@
 import os
 import json
 from config import configure_logging, configure_github_api
-from helpers import extract_path_from_command, format_command, filter_files_by_depth, run_commands, comment_pr, comment_pr_message
+from helpers import extract_path_from_command, format_command, filter_files_by_depth, run_commands, comment_pr, comment_pr_message, str_to_bool
 
 GITHUB_CONTEXT=json.loads(os.environ.get("GITHUB_CONTEXT"))
 EVENT_TYPE=GITHUB_CONTEXT.get("event_name")
@@ -11,6 +11,8 @@ GITHUB_WORKSPACE=os.environ.get("GITHUB_WORKSPACE")
 TERRAGRUNT_DEPTH=int(os.environ.get("TERRAGRUNT_DEPTH"))
 IAC_TOOL=os.environ.get("IAC_TOOL").upper()
 EXCLUDED_DIRNAMES=json.loads(os.environ.get("EXCLUDED_DIRNAMES"))
+REVIEW_REQUIRED=str_to_bool(os.environ.get("REVIEW_REQUIRED"))
+REVIEW_PATHS=json.loads(os.environ.get("REVIEW_PATHS"))
 
 logger = configure_logging()
 github = configure_github_api(GITHUB_TOKEN)
@@ -87,14 +89,26 @@ def case_issue_comment():
     repo = REPOSITORY
     pr = repo.get_pull(issue_metadata.get("number"))
 
+    # Check if at least one review is approved
+    is_reviewed = False
+    for review in pr.get_reviews():
+        logger.debug(f"Review: User {review.user.login} {review.state} this PR")
+        if review.state == "APPROVED":
+            is_reviewed = True
+            break
+
     comment = pr.get_issue_comment(comment_metadata.get("id"))
     comment.create_reaction("rocket")
     
     logger.debug("COMMENT_BODY="+comment_metadata.get("body"))
     logger.debug("WORKSPACE="+GITHUB_WORKSPACE)
 
-    # Command to execute
-    command = format_command(comment_metadata.get("body"), IAC_TOOL)
+    try:
+        command = format_command(logger, comment_metadata.get("body"), IAC_TOOL, is_reviewed, REVIEW_REQUIRED, REVIEW_PATHS)
+    except Exception as e:
+        comment_pr_message(logger, pr, f"Error running action: {str(e)}")
+        exit(1)
+
     # Specify the working directory
     relative_path=extract_path_from_command(logger, comment_metadata.get("body"))
     working_directory = GITHUB_WORKSPACE+"/"+relative_path
