@@ -34,6 +34,7 @@ def format_command(logger, command, iac_tool, is_reviewed, review_required, revi
     words = words[:index] if index is not None else words
     paths = words[index + 1] if index is not None and index + 1 < len(words) else None
     if paths:
+        logger.debug(f"raw paths: {paths}")
         paths_set = set(paths.split('/'))
 
     # Convert the lists to sets for efficient comparison
