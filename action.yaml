@@ -31,11 +31,11 @@ inputs:
   REVIEW_REQUIRED:
     description: Review is required to run apply command
     required: false
-    default: '[".github", ".modules"]'
+    default: true
   REVIEW_PATHS:
     description: Paths that need review to apply
     required: false
-    default: '[""]'
+    default: '["prod"]'
 
 runs:
   using: "composite"

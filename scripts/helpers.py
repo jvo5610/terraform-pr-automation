@@ -1,5 +1,8 @@
 import subprocess
 
+def str_to_bool(s):
+    return s.lower() == "true"
+
 def contains_filtered_dirnames(filename, excluded_dirnames):
     for dirname in excluded_dirnames:
         if dirname in filename:
@@ -22,7 +25,7 @@ def extract_path_from_command(logger, command):
     if index + 1 < len(words):
         return words[index + 1]
 
-def format_command(command, iac_tool):
+def format_command(command, iac_tool, is_reviewed, review_required, review_paths):
     AUTO_APPROVE_COMMANDS = ["apply", "destroy"]
     # Extract the path and words before -p
     words = command.split()
@@ -32,11 +35,13 @@ def format_command(command, iac_tool):
     # Convert the lists to sets for efficient comparison
     set1 = set(words)
     set2 = set(AUTO_APPROVE_COMMANDS)
+    set3 = set(review_paths)
 
-    # Find the common elements between the two sets
+    paths_need_review = set1.intersection(set3)
     command_intersections = set1.intersection(set2)
+
     if command_intersections:
-        if True:
+        if not is_reviewed and paths_need_review and review_required:
             raise ValueError("At least 1 review is required to run apply command")
         if iac_tool=="TERRAFORM":
             words.append("-auto-approve")
