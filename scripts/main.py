@@ -87,6 +87,13 @@ def case_issue_comment():
     repo = REPOSITORY
     pr = repo.get_pull(issue_metadata.get("number"))
 
+    reviews = pr.get_reviews()
+    for review in reviews:
+        print(review.user.login)         # GitHub username of the reviewer
+        print(review.state)              # Review state (e.g., "APPROVED", "COMMENTED", ...)
+        print(review.body)               # Comment text of the review
+        print('---')                     # Just a separator for clarity
+
     comment = pr.get_issue_comment(comment_metadata.get("id"))
     comment.create_reaction("rocket")
     
