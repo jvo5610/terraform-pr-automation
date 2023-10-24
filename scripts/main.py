@@ -103,7 +103,7 @@ def case_issue_comment():
     logger.debug("WORKSPACE="+GITHUB_WORKSPACE)
 
     try:
-        command = format_command(comment_metadata.get("body"), IAC_TOOL, is_reviewed, REVIEW_REQUIRED, REVIEW_PATHS)
+        command = format_command(logger, comment_metadata.get("body"), IAC_TOOL, is_reviewed, REVIEW_REQUIRED, REVIEW_PATHS)
     except Exception as e:
         comment_pr_message(logger, pr, f"Error running action: {str(e)}")
         exit(1)

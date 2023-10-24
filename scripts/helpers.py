@@ -25,7 +25,7 @@ def extract_path_from_command(logger, command):
     if index + 1 < len(words):
         return words[index + 1]
 
-def format_command(command, iac_tool, is_reviewed, review_required, review_paths):
+def format_command(logger, command, iac_tool, is_reviewed, review_required, review_paths):
     AUTO_APPROVE_COMMANDS = ["apply", "destroy"]
     # Extract the path and words before -p
     words = command.split()
