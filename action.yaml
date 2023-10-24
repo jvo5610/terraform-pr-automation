@@ -35,7 +35,7 @@ inputs:
   REVIEW_PATHS:
     description: Paths that need review to apply
     required: false
-    default: '["production"]'
+    default: '["prod","production"]'
 
 runs:
   using: "composite"
