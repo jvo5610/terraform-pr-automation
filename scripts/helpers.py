@@ -40,6 +40,7 @@ def format_command(command, iac_tool, is_reviewed, review_required, review_paths
     paths_need_review = set1.intersection(set3)
     command_intersections = set1.intersection(set2)
 
+    print(f"path_intersection: {type(review_paths)}")
     print(f"path_intersection: {paths_need_review}")
     print(f"review_required: {review_required}")
 
