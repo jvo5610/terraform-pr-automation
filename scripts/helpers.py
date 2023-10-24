@@ -28,16 +28,20 @@ def extract_path_from_command(logger, command):
 def format_command(logger, command, iac_tool, is_reviewed, review_required, review_paths):
     AUTO_APPROVE_COMMANDS = ["apply", "destroy"]
     # Extract the path and words before -p
+    paths_set = set()
     words = command.split()
     index = words.index("-p") if "-p" in words else None
     words = words[:index] if index is not None else words
+    paths = words[index + 1] if index is not None and index + 1 < len(words) else None
+    if paths:
+        paths_set = set(paths.split('/'))
 
     # Convert the lists to sets for efficient comparison
     set1 = set(words)
     set2 = set(AUTO_APPROVE_COMMANDS)
     set3 = set(review_paths)
 
-    paths_need_review = set1.intersection(set3)
+    paths_need_review = paths_set.intersection(set3)
     command_intersections = set1.intersection(set2)
 
     logger.debug(f"command: {command}")
