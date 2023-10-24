@@ -89,8 +89,12 @@ def case_issue_comment():
     repo = REPOSITORY
     pr = repo.get_pull(issue_metadata.get("number"))
 
-    reviews = pr.get_reviews()
-    is_reviewed = reviews.totalCount > 0
+    # Check if at least one review is approved
+    is_reviewed = False
+    for review in pr.get_reviews():
+        if review.state == "APPROVED":
+            is_reviewed = True
+            break
 
     comment = pr.get_issue_comment(comment_metadata.get("id"))
     comment.create_reaction("rocket")
