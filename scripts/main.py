@@ -1,7 +1,7 @@
 import os
 import json
 from config import configure_logging, configure_github_api
-from helpers import extract_path_from_command, format_command, filter_files_by_depth, run_commands, comment_pr, comment_pr_message, return_error
+from helpers import extract_path_from_command, format_command, filter_files_by_depth, run_commands, comment_pr, comment_pr_message
 
 GITHUB_CONTEXT=json.loads(os.environ.get("GITHUB_CONTEXT"))
 EVENT_TYPE=GITHUB_CONTEXT.get("event_name")
