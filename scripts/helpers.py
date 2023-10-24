@@ -31,14 +31,13 @@ def format_command(logger, command, iac_tool, is_reviewed, review_required, revi
     paths_set = set()
     words = command.split()
     index = words.index("-p") if "-p" in words else None
-    words = words[:index] if index is not None else words
+    command_words = words[:index] if index is not None else words
     paths = words[index + 1] if index is not None and index + 1 < len(words) else None
     if paths:
-        logger.debug(f"raw paths: {paths}")
         paths_set = set(paths.split('/'))
 
     # Convert the lists to sets for efficient comparison
-    set1 = set(words)
+    set1 = set(command_words)
     set2 = set(AUTO_APPROVE_COMMANDS)
     set3 = set(review_paths)
 
