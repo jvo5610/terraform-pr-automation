@@ -92,6 +92,7 @@ def case_issue_comment():
     # Check if at least one review is approved
     is_reviewed = False
     for review in pr.get_reviews():
+        logger.debug(f"Review: User {review.user.login} {review.state} this PR")
         if review.state == "APPROVED":
             is_reviewed = True
             break

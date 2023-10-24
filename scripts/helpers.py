@@ -45,10 +45,9 @@ def format_command(logger, command, iac_tool, is_reviewed, review_required, revi
     command_intersections = set1.intersection(set2)
 
     logger.debug(f"command: {command}")
-    logger.debug(f"words set: {set1}")
+    logger.debug(f"commands set: {set1}")
     logger.debug(f"paths set: {paths_set}")
     logger.debug(f"paths that need review set : {set3}")
-    logger.debug(f"Path that need review: {review_paths}")
     logger.debug(f"Path intersections: {paths_need_review}")
     logger.debug(f"Review required: {review_required}")
     logger.debug(f"Has reviews: {is_reviewed}")
@@ -57,12 +56,12 @@ def format_command(logger, command, iac_tool, is_reviewed, review_required, revi
         if not is_reviewed and paths_need_review and review_required:
             raise ValueError("At least 1 review is required to run apply command")
         if iac_tool=="TERRAFORM":
-            words.append("-auto-approve")
+            command_words.append("-auto-approve")
         if iac_tool=="TERRAGRUNT":
-            words.append("--terragrunt-non-interactive")
-            words.append("-auto-approve")
+            command_words.append("--terragrunt-non-interactive")
+            command_words.append("-auto-approve")
 
-    return words
+    return command_words
 
 def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames):
     if iac_tool == "TERRAGRUNT":
