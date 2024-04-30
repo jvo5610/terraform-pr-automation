@@ -20,7 +20,26 @@ inputs:
   TERRAGRUNT_DEPTH:
     description: Minimum depth between the childs terragrunt configuration files and the parent
     required: false
-    default: 0  
+    default: 0
+  IAC_TOOL:
+    description: IAC tool TERRAGRUNT or TERRAFORM
+    required: true
+  EXCLUDED_DIRNAMES:
+    description: Dirnames to be excluded from paths where automation run
+    required: false
+    default: '[".github", ".modules"]'
+
+runs:
+  using: "composite"
+  steps:
+  
+    - name: Set up Python
+      uses: actions/setup-python@v5.1.0
+      with:
+        python-version: 3.x
+
+    - name: Install Python dependencies
+      run: |
         python -m pip install --upgrade pip
         pip install -r ${{ github.action_path }}/scripts/requirements.txt
       shell: bash
@@ -28,7 +47,7 @@ inputs:
     - name: Install Terragrunt
       uses: autero1/action-terragrunt@v3.0.2
       with:
-        terragrunt-version: ${{ inputs.TERRAGRUNT_VERSION }}
+        terragrunt_version: ${{ inputs.TERRAGRUNT_VERSION }}
 
     - name: Install Terraform
       uses: hashicorp/setup-terraform@v3.1.0
