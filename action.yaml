@@ -47,7 +47,7 @@ runs:
     - name: Install Terragrunt
       uses: autero1/action-terragrunt@v3.0.2
       with:
-        terragrunt_version: ${{ inputs.TERRAGRUNT_VERSION }}
+        terragrunt-version: ${{ inputs.TERRAGRUNT_VERSION }}
 
     - name: Install Terraform
       uses: hashicorp/setup-terraform@v3.1.0
