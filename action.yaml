@@ -29,11 +29,11 @@ inputs:
     required: false
     default: '[".github", ".modules"]'
   REVIEW_REQUIRED:
-    description: Review is required to run apply command
+    description: Enable or disable review in specific paths to run apply command
     required: false
     default: false
   REVIEW_PATHS:
-    description: Paths that need review to apply
+    description: Directory names list that needs approve to run apply command
     required: false
     default: '["prod","production"]'
 
