@@ -1,5 +1,8 @@
 import subprocess
 
+def str_to_bool(s):
+    return s.lower() == "true"
+
 def contains_filtered_dirnames(filename, excluded_dirnames):
     for dirname in excluded_dirnames:
         if dirname in filename:
@@ -22,27 +25,43 @@ def extract_path_from_command(logger, command):
     if index + 1 < len(words):
         return words[index + 1]
 
-def format_command(command, iac_tool):
+def format_command(logger, command, iac_tool, is_reviewed, review_required, review_paths):
     AUTO_APPROVE_COMMANDS = ["apply", "destroy"]
     # Extract the path and words before -p
+    paths_set = set()
     words = command.split()
     index = words.index("-p") if "-p" in words else None
-    words = words[:index] if index is not None else words
+    command_words = words[:index] if index is not None else words
+    paths = words[index + 1] if index is not None and index + 1 < len(words) else None
+    if paths:
+        paths_set = set(paths.split('/'))
 
     # Convert the lists to sets for efficient comparison
-    set1 = set(words)
+    set1 = set(command_words)
     set2 = set(AUTO_APPROVE_COMMANDS)
+    set3 = set(review_paths)
 
-    # Find the common elements between the two sets
+    paths_need_review = paths_set.intersection(set3)
     command_intersections = set1.intersection(set2)
-    if command_intersections:
-        if iac_tool=="TERRAFORM":
-            words.append("-auto-approve")
-        if iac_tool=="TERRAGRUNT":
-            words.append("--terragrunt-non-interactive")
-            words.append("-auto-approve")
 
-    return words
+    logger.debug(f"command: {command}")
+    logger.debug(f"commands set: {set1}")
+    logger.debug(f"paths set: {paths_set}")
+    logger.debug(f"paths that need review set : {set3}")
+    logger.debug(f"Path intersections: {paths_need_review}")
+    logger.debug(f"Review required: {review_required}")
+    logger.debug(f"Has reviews: {is_reviewed}")
+
+    if command_intersections:
+        if not is_reviewed and paths_need_review and review_required:
+            raise ValueError("At least 1 review is required to run apply command")
+        if iac_tool=="TERRAFORM":
+            command_words.append("-auto-approve")
+        if iac_tool=="TERRAGRUNT":
+            command_words.append("--terragrunt-non-interactive")
+            command_words.append("-auto-approve")
+
+    return command_words
 
 def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames):
     if iac_tool == "TERRAGRUNT":
