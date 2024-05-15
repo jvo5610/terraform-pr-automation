@@ -42,7 +42,7 @@ runs:
   steps:
   
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5.1.0
       with:
         python-version: 3.x
 
@@ -53,12 +53,12 @@ runs:
       shell: bash
 
     - name: Install Terragrunt
-      uses: autero1/action-terragrunt@v1.3.2
+      uses: autero1/action-terragrunt@v3.0.2
       with:
-        terragrunt_version: ${{ inputs.TERRAGRUNT_VERSION }}
+        terragrunt-version: ${{ inputs.TERRAGRUNT_VERSION }}
 
     - name: Install Terraform
-      uses: hashicorp/setup-terraform@v2
+      uses: hashicorp/setup-terraform@v3.1.0
       with:
         terraform_wrapper: false
         terraform_version: ${{ inputs.TERRAFORM_VERSION }}
