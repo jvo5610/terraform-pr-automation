@@ -65,7 +65,7 @@ runs:
     
     - name: Run Python script
       env:
-          TF_CLI_ARGS: "-no-color -input=false"
+          TF_CLI_ARGS: -no-color
           GITHUB_CONTEXT: ${{ toJson(github) }}
           LOG_LEVEL: ${{ inputs.LOG_LEVEL }}
           TERRAGRUNT_DEPTH: ${{ inputs.TERRAGRUNT_DEPTH }}
