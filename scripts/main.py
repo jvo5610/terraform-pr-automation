@@ -36,7 +36,7 @@ def case_pull_request():
 
     # Set commands to execute
     command = {
-        "TERRAGRUNT" : ["terragrunt","run-all", "plan"],
+        "TERRAGRUNT" : ["terragrunt","run-all", "plan", "--terragrunt-non-interactive"],
         "TERRAFORM" : ["terraform","plan"]
     }
     command_init=["terraform", "init"]
