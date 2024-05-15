@@ -59,8 +59,11 @@ def format_command(logger, command, iac_tool, is_reviewed, review_required, revi
             command_words.append("-auto-approve")
         if iac_tool=="TERRAGRUNT":
             command_words.append("-auto-approve")
-
-    return command_words.append("--terragrunt-non-interactive")
+    
+    if iac_tool=="TERRAGRUNT":
+            command_words.append("--terragrunt-non-interactive")
+            
+    return command_words
 
 def filter_files_by_depth(logger, files_list, depth, iac_tool, excluded_dirnames):
     if iac_tool == "TERRAGRUNT":
