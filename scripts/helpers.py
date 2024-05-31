@@ -40,6 +40,7 @@ def format_command(command, iac_tool):
             words.append("-auto-approve")
         if iac_tool=="TERRAGRUNT":
             words.append("--terragrunt-non-interactive")
+            words.append("--terragrunt-include-external-dependencies")
             words.append("-auto-approve")
 
     return words
