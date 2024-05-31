@@ -12,11 +12,11 @@ inputs:
   TERRAFORM_VERSION:
     description: Terraform version
     required: false
-    default: v1.5.3
+    default: v1.8.1
   TERRAGRUNT_VERSION:
     description: Terragrunt version
     required: false
-    default: v0.48.6
+    default: v0.57.13
   TERRAGRUNT_DEPTH:
     description: Minimum depth between the childs terragrunt configuration files and the parent
     required: false
